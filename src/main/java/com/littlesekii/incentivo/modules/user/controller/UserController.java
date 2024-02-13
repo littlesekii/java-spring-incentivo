@@ -1,10 +1,9 @@
 package com.littlesekii.incentivo.modules.user.controller;
 
 import com.littlesekii.incentivo.modules.user.entity.User;
+import com.littlesekii.incentivo.modules.user.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,9 +11,22 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    final
+    UserService service;
+
+    public UserController(UserService service) {
+        this.service = service;
+    }
+
     @GetMapping("")
     public ResponseEntity<List<User>> findAll() {
-        List<User> users = List.of(new User(1L, "Davi Bacalhau", "littlesekii@gmail.com", "(21) 94002-8922", "uvekp23465"));
-        return ResponseEntity.ok().body(users);
+        var res = service.findAll();
+        return ResponseEntity.ok().body(res);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        var res = service.findById(id);
+        return ResponseEntity.ok().body(res);
     }
 }
