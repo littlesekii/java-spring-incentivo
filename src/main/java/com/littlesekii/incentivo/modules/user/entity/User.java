@@ -1,15 +1,16 @@
 package com.littlesekii.incentivo.modules.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.littlesekii.incentivo.modules.order.entity.Order;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "t_user")
+@Entity
+@Table(name = "t_user")
 public class User implements Serializable {
 
     @Serial
@@ -22,6 +23,10 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
+
 
     public User() {
     }
@@ -73,6 +78,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 
     @Override
