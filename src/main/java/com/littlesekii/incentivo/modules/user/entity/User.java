@@ -1,5 +1,6 @@
 package com.littlesekii.incentivo.modules.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.littlesekii.incentivo.modules.order.entity.Order;
 import jakarta.persistence.*;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "t_user")
 public class User implements Serializable {
@@ -24,8 +26,10 @@ public class User implements Serializable {
     private String phone;
     private String password;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
-    private List<Order> orders = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
 
 
     public User() {

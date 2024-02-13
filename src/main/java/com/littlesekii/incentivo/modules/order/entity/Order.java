@@ -1,5 +1,6 @@
 package com.littlesekii.incentivo.modules.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.littlesekii.incentivo.modules.user.entity.User;
 import jakarta.persistence.*;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "t_order")
 public class Order implements Serializable {
@@ -18,7 +20,10 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
