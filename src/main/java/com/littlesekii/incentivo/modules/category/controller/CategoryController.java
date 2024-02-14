@@ -1,7 +1,7 @@
-package com.littlesekii.incentivo.modules.order.controller;
+package com.littlesekii.incentivo.modules.category.controller;
 
-import com.littlesekii.incentivo.modules.order.entity.Order;
-import com.littlesekii.incentivo.modules.order.service.OrderService;
+import com.littlesekii.incentivo.modules.category.entity.Category;
+import com.littlesekii.incentivo.modules.category.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
-public class OrderController {
+@RequestMapping("/categories")
+public class CategoryController {
 
-    private final OrderService service;
+    private final CategoryService service;
 
-    public OrderController(OrderService service) {
+    public CategoryController(CategoryService service) {
         this.service = service;
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Order>> findAll() {
+    public ResponseEntity<List<Category>> findAll() {
         var res = service.findAll();
         return ResponseEntity.ok().body(res);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> findById(@PathVariable Long id) {
+    public ResponseEntity<Category> findById(@PathVariable Long id) {
         var res = service.findById(id);
         return ResponseEntity.ok().body(res);
     }

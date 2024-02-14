@@ -1,5 +1,7 @@
 package com.littlesekii.incentivo.config;
 
+import com.littlesekii.incentivo.modules.category.entity.Category;
+import com.littlesekii.incentivo.modules.category.repository.CategoryRepository;
 import com.littlesekii.incentivo.modules.order.entity.Order;
 import com.littlesekii.incentivo.modules.order.entity.OrderStatus;
 import com.littlesekii.incentivo.modules.order.repository.OrderRepository;
@@ -18,10 +20,12 @@ public class TestConfig implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final CategoryRepository categoryRepository;
 
-    public TestConfig(UserRepository userRepository, OrderRepository orderRepository) {
+    public TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -53,6 +57,17 @@ public class TestConfig implements CommandLineRunner {
                 )
             )
         );
+
+        List<Category> categories = List.of(
+                new Category(null, "Electronics"),
+                new Category(null, "Books"),
+                new Category(null, "Computers")
+        );
+
+        categoryRepository.saveAll(categories);
+
+        System.out.println("Categorias adicionadas:");
+        categories.forEach((category -> System.out.println(category.getId() + " - " + category.getName())));
 
     }
 }
