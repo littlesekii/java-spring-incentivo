@@ -1,6 +1,9 @@
 package com.littlesekii.incentivo.modules.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.littlesekii.incentivo.modules.category.entity.Category;
+import com.littlesekii.incentivo.modules.order.entity.Order;
+import com.littlesekii.incentivo.modules.order_item.entity.OrderItem;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -31,6 +34,9 @@ public class Product implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private final Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private final Set<OrderItem> orderItems = new HashSet<>();
 
     public Product() {
     }
@@ -85,6 +91,16 @@ public class Product implements Serializable {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders() {
+        Set<Order> orders = new HashSet<>();
+
+        for (OrderItem orderItem : this.orderItems)
+            orders.add(orderItem.getOrder());
+
+        return orders;
     }
 
     @Override
