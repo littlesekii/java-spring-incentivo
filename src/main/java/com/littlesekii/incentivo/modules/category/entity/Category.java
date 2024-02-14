@@ -1,5 +1,6 @@
 package com.littlesekii.incentivo.modules.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.littlesekii.incentivo.modules.product.entity.Product;
 import jakarta.persistence.*;
 
@@ -22,6 +23,7 @@ public class Category implements Serializable {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private final Set<Product> products = new HashSet<>();
 
