@@ -4,7 +4,9 @@ import com.littlesekii.incentivo.modules.user.entity.User;
 import com.littlesekii.incentivo.modules.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,7 +19,7 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<User>> findAll() {
         var res = service.findAll();
         return ResponseEntity.ok().body(res);
@@ -27,5 +29,15 @@ public class UserController {
     public ResponseEntity<User> findById(@PathVariable Long id) {
         var res = service.findById(id);
         return ResponseEntity.ok().body(res);
+    }
+
+    @PostMapping
+    public ResponseEntity<User> save(@RequestBody User user) {
+        User res = service.save(user);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(res.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(res);
     }
 }
