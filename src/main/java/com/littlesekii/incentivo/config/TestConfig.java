@@ -5,6 +5,8 @@ import com.littlesekii.incentivo.modules.category.repository.CategoryRepository;
 import com.littlesekii.incentivo.modules.order.entity.Order;
 import com.littlesekii.incentivo.modules.order.entity.OrderStatus;
 import com.littlesekii.incentivo.modules.order.repository.OrderRepository;
+import com.littlesekii.incentivo.modules.product.entity.Product;
+import com.littlesekii.incentivo.modules.product.repository.ProductRepository;
 import com.littlesekii.incentivo.modules.user.entity.User;
 import com.littlesekii.incentivo.modules.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -21,15 +23,62 @@ public class TestConfig implements CommandLineRunner {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
-    public TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository) {
+    public TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+
+        List<Category> categories = List.of(
+                new Category(null, "Electronics"),
+                new Category(null, "Books"),
+                new Category(null, "Computers")
+        );
+
+        categoryRepository.saveAll(categories);
+
+        System.out.println("Categorias adicionadas:");
+        categories.forEach((category -> System.out.println(category.getId() + " - " + category.getName())));
+
+        List<Product> products = List.of(
+                new Product(null, "The Lord of the Rings", "Lorem ipsum dolor sit amet, consectetur.", 90.5, ""),
+                new Product(null, "Smart TV", "Nulla eu imperdiet purus. Maecenas ante.", 2190.0, ""),
+                new Product(null, "Macbook Pro", "Nam eleifend maximus tortor, at mollis.", 1250.0, ""),
+                new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, ""),
+                new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "")
+        );
+
+        productRepository.saveAll(products);
+
+        System.out.println("Produtos adicionados:");
+        products.forEach((product -> System.out.println(product.getId() + " - " + product.getName())));
+
+        products.get(0).getCategories().add(categories.get(1));
+        products.get(1).getCategories().add(categories.get(0));
+        products.get(2).getCategories().add(categories.get(0));
+        products.get(2).getCategories().add(categories.get(2));
+        products.get(3).getCategories().add(categories.get(0));
+        products.get(3).getCategories().add(categories.get(2));
+        products.get(4).getCategories().add(categories.get(1));
+
+        System.out.println("Categoria dos produtos adicionados:");
+        products.forEach(
+            product -> {
+                System.out.println(product.getId() + " - " + product.getName() + ": ");
+                product.getCategories().forEach(
+                    category -> System.out.println("\t" + category.getName())
+                );
+            }
+        );
+
+        productRepository.saveAll(products);
+
         List<User> users = List.of(
                 new User(null, "Davi Bacalhau", "littlesekii@gmail.com", "(21) 94002-8922", "uvekp23465"),
                 new User(null, "Flávia Helena", "flavinhahele@gmail.com", "(43) 94002-8922", "uvekp23564")
@@ -57,17 +106,5 @@ public class TestConfig implements CommandLineRunner {
                 )
             )
         );
-
-        List<Category> categories = List.of(
-                new Category(null, "Electronics"),
-                new Category(null, "Books"),
-                new Category(null, "Computers")
-        );
-
-        categoryRepository.saveAll(categories);
-
-        System.out.println("Categorias adicionadas:");
-        categories.forEach((category -> System.out.println(category.getId() + " - " + category.getName())));
-
     }
 }
