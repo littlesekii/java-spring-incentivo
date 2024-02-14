@@ -1,13 +1,16 @@
 package com.littlesekii.incentivo.modules.order.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.littlesekii.incentivo.modules.order_item.entity.OrderItem;
 import com.littlesekii.incentivo.modules.user.entity.User;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 @Entity
@@ -28,8 +31,10 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
-
     private Integer status;
+
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order() {
     }
@@ -68,6 +73,10 @@ public class Order implements Serializable {
 
     public OrderStatus getStatus() {
         return OrderStatus.fromCode(this.status);
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     public void setStatus(OrderStatus status) {

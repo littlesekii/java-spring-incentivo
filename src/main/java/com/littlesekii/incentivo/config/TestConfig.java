@@ -5,6 +5,8 @@ import com.littlesekii.incentivo.modules.category.repository.CategoryRepository;
 import com.littlesekii.incentivo.modules.order.entity.Order;
 import com.littlesekii.incentivo.modules.order.entity.OrderStatus;
 import com.littlesekii.incentivo.modules.order.repository.OrderRepository;
+import com.littlesekii.incentivo.modules.order_item.entity.OrderItem;
+import com.littlesekii.incentivo.modules.order_item.repository.OrderItemRepository;
 import com.littlesekii.incentivo.modules.product.entity.Product;
 import com.littlesekii.incentivo.modules.product.repository.ProductRepository;
 import com.littlesekii.incentivo.modules.user.entity.User;
@@ -25,11 +27,20 @@ public class TestConfig implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
-    public TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository, ProductRepository productRepository) {
+    private final OrderItemRepository orderItemRepository;
+
+    public TestConfig(
+            UserRepository userRepository,
+            OrderRepository orderRepository,
+            CategoryRepository categoryRepository,
+            ProductRepository productRepository,
+            OrderItemRepository orderItemRepository
+    ) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -106,5 +117,30 @@ public class TestConfig implements CommandLineRunner {
                 )
             )
         );
+
+        List<OrderItem> orderItems = List.of(
+                new OrderItem(orders.get(0), products.get(0), 2, products.get(0).getPrice()),
+                new OrderItem(orders.get(0), products.get(2), 1, products.get(2).getPrice()),
+                new OrderItem(orders.get(1), products.get(2), 2, products.get(2).getPrice()),
+                new OrderItem(orders.get(2), products.get(4), 2, products.get(4).getPrice())
+        );
+
+        orderItemRepository.saveAll(orderItems);
+
+        System.out.println("Itens de pedidos adicionados:");
+        orderItems.forEach(
+            orderItem -> {
+                System.out.println(
+                    orderItem.getOrder().getId() + " - " +
+                    orderItem.getOrder().getClient().getName() + ": "
+                );
+                System.out.println(
+                        "\t" + orderItem.getProduct().getName() + " - " +
+                        orderItem.getQuantity() + " itens, R$" + orderItem.getPrice() +
+                        "(R$" + orderItem.getQuantity() * orderItem.getPrice() + ")"
+                );
+            }
+        );
+
     }
 }
