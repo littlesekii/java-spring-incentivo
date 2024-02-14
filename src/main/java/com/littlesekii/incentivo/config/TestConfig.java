@@ -7,6 +7,7 @@ import com.littlesekii.incentivo.modules.order.entity.OrderStatus;
 import com.littlesekii.incentivo.modules.order.repository.OrderRepository;
 import com.littlesekii.incentivo.modules.order_item.entity.OrderItem;
 import com.littlesekii.incentivo.modules.order_item.repository.OrderItemRepository;
+import com.littlesekii.incentivo.modules.payment.entity.Payment;
 import com.littlesekii.incentivo.modules.product.entity.Product;
 import com.littlesekii.incentivo.modules.product.repository.ProductRepository;
 import com.littlesekii.incentivo.modules.user.entity.User;
@@ -141,6 +142,11 @@ public class TestConfig implements CommandLineRunner {
                 );
             }
         );
+
+        Payment payment = new Payment(null, Instant.parse("2024-01-02T02:00:00Z"), orders.get(1));
+        orders.get(1).setPayment(payment);
+
+        orderRepository.save(orders.get(1));
 
     }
 }
