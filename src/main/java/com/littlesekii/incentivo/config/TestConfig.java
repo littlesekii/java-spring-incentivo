@@ -1,6 +1,7 @@
 package com.littlesekii.incentivo.config;
 
 import com.littlesekii.incentivo.modules.order.entity.Order;
+import com.littlesekii.incentivo.modules.order.entity.OrderStatus;
 import com.littlesekii.incentivo.modules.order.repository.OrderRepository;
 import com.littlesekii.incentivo.modules.user.entity.User;
 import com.littlesekii.incentivo.modules.user.repository.UserRepository;
@@ -35,9 +36,9 @@ public class TestConfig implements CommandLineRunner {
         users.forEach((user -> System.out.println(user.getId() + " - " + user.getName())));
 
         List<Order> orders = List.of(
-                new Order(null, Instant.parse("2024-01-01T00:00:00Z"), users.get(0)),
-                new Order(null, Instant.parse("2024-01-02T01:00:59Z"), users.get(1)),
-                new Order(null, Instant.parse("2024-05-19T13:34:43Z"), users.get(1))
+                new Order(null, Instant.parse("2024-01-01T00:00:00Z"), users.get(0), OrderStatus.WAITING_PAYMENT),
+                new Order(null, Instant.parse("2024-01-02T01:00:59Z"), users.get(1), OrderStatus.PAID),
+                new Order(null, Instant.parse("2024-05-19T13:34:43Z"), users.get(1), OrderStatus.DELIVERED)
         );
 
         orderRepository.saveAll(orders);

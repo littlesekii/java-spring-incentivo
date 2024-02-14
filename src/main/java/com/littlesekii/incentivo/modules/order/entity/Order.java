@@ -28,13 +28,18 @@ public class Order implements Serializable {
     @JoinColumn(name = "client_id")
     private User client;
 
+
+    private Integer status;
+
     public Order() {
     }
 
-    public Order(Long id, Instant moment, User client) {
+    public Order(Long id, Instant moment, User client, OrderStatus status) {
+        super();
         this.id = id;
         this.moment = moment;
         this.client = client;
+        setStatus(status);
     }
 
     public Long getId() {
@@ -59,6 +64,15 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public OrderStatus getStatus() {
+        return OrderStatus.fromCode(this.status);
+    }
+
+    public void setStatus(OrderStatus status) {
+        if (status != null)
+            this.status = status.getCode();
     }
 
     @Override
