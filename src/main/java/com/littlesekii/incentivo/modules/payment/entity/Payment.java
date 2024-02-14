@@ -1,5 +1,6 @@
 package com.littlesekii.incentivo.modules.payment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.littlesekii.incentivo.modules.order.entity.Order;
 import jakarta.persistence.*;
 
@@ -21,6 +22,7 @@ public class Payment implements Serializable {
 
     private Instant moment;
 
+    @JsonIgnore
     @OneToOne
     @MapsId
     private Order order;

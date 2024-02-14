@@ -1,6 +1,7 @@
 package com.littlesekii.incentivo.modules.order.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.littlesekii.incentivo.modules.order_item.entity.OrderItem;
 import com.littlesekii.incentivo.modules.payment.entity.Payment;
 import com.littlesekii.incentivo.modules.user.entity.User;
@@ -94,6 +95,16 @@ public class Order implements Serializable {
     public void setStatus(OrderStatus status) {
         if (status != null)
             this.status = status.getCode();
+    }
+
+    public double getTotal() {
+        double total = 0;
+
+        for (OrderItem item : items) {
+            total += item.getSubTotal();
+        }
+
+        return total;
     }
 
     @Override
